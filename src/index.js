@@ -11,7 +11,12 @@ const logger = require('./utils/logger');
 const { getPendingCount } = require('./services/deliveryTracker');
 
 // ── Bootstrap ────────────────────────────────────────────────────────────────
-initializeFirebase();
+try {
+  initializeFirebase();
+} catch (err) {
+  logger.error('Firebase initialization failed – critical error', { error: err.message, stack: err.stack });
+  process.exit(1);
+}
 
 const app = express();
 app.set('trust proxy', 1); // Railway sits behind a proxy
